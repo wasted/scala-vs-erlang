@@ -2,8 +2,8 @@
 
 Benchmark for testing Actor implementations on Scala, Akka and Erlang.
 The Actor has 2 responsibilities:
-* Add a count X to the Actors current tally
-* Get the current count and reset the agent count to zero
+- Add a count X to the Actors current tally
+- Get the current count and reset the agent count to zero
 
 I've used Scala 2.9.1 and Erlang 5.8.5.
 
