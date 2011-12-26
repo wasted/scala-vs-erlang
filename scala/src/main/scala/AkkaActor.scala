@@ -16,9 +16,11 @@ class AkkaActorKernel extends Bootable {
 	def startup = {
 		val testActor = system.actorOf(Props[CounterActor], "test")
 		runTest(testActor, runs)
+
+		printf("--%n")
+		ag.bett.scala.test.lift.CounterClient.run(runs)
 		
 		printf("--%n")
-		
 		ag.bett.scala.test.scala.CounterClient.run(runs)
 		
 		shutdown
