@@ -4,6 +4,20 @@ import scala.actors.Actor
 import scala.actors.Actor._
 import scala.compat.Platform
 import scala.actors.Scheduler
+import akka.kernel._
+
+
+class ActorKernel extends Bootable {
+	val runs = 12000000
+
+	def startup = {
+		ag.bett.scala.test.scala.CounterClient.run(runs)
+		shutdown
+	}
+
+	def shutdown = sys.exit(0)
+
+}
 
 
 case object GetAndReset

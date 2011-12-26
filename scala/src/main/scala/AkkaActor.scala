@@ -9,20 +9,13 @@ import akka.util.duration._
 import akka.dispatch._
 
 
-class AkkaActorKernel extends Bootable {
+class ActorKernel extends Bootable {
 	val system = ActorSystem("AkkaTest")
 	val runs = 12000000
 
 	def startup = {
 		val testActor = system.actorOf(Props[CounterActor], "test")
 		runTest(testActor, runs)
-
-		printf("--%n")
-		ag.bett.scala.test.lift.CounterClient.run(runs)
-		
-		printf("--%n")
-		ag.bett.scala.test.scala.CounterClient.run(runs)
-		
 		shutdown
 		sys.exit(0)
 		//system.eventStream.subscribe(mgmt, classOf[RemoteLifeCycleEvent])

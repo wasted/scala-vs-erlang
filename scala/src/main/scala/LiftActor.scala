@@ -1,7 +1,22 @@
 package ag.bett.scala.test.lift
 
 import net.liftweb.actor._
+import akka.kernel._
 import scala.compat.Platform
+
+
+class ActorKernel extends Bootable {
+	val runs = 12000000
+
+	def startup = {
+		ag.bett.scala.test.lift.CounterClient.run(runs)
+		shutdown
+	}
+
+	def shutdown = sys.exit(0)
+
+}
+
 
 
 case object GetAndReset
