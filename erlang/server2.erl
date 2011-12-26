@@ -1,22 +1,30 @@
 -module(server2).
 
--export([start_link/0,bytes/1,get_count/0,stop/0]).
+-export([start_link/0,bytes/1,bytes/2,get_count/0,get_count/1,stop/0]).
 
 -define(SERVER,?MODULE).
 
 start_link() ->
 	PID = spawn(fun()-> serve_request(0) end),
-	register(?SERVER,PID).
+	register(?SERVER,PID),
+	PID.
 	
 stop() -> 
 	?SERVER ! exit,
 	unregister(?SERVER).
+
+get_count(PID) ->
+	PID ! {get_count,self()},
+	receive X -> X end.
 
 get_count() -> 
 	?SERVER ! {get_count,self()},
 	receive
 		X -> X
 	end.
+
+bytes(PID,Count) ->
+	PID ! {bytes,Count}.
 
 bytes(Count) -> 
 	?SERVER ! {bytes,Count},
