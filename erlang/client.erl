@@ -71,9 +71,6 @@ print_results(Count,Size,Start,Finish) ->
 	io:format("Throughput=~p per sec~n",[throughput(Size,Start,Finish)]).
 
 elapsedTime(Start,Finish) -> 
-	(toMicroSeconds(Finish) - toMicroSeconds(Start)) /1000000.
-
-toMicroSeconds({MegaSeconds,Seconds,MicroSeconds}) -> 
-	(MegaSeconds+Seconds) * 1000000 + MicroSeconds.
+    timer:now_diff(Finish, Start) / 1000000.
 
 throughput(Size,Start,Finish) -> Size / elapsedTime(Start,Finish).
