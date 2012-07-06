@@ -1,6 +1,10 @@
 -module(client).
 
 -export([runTest/1,runTest2/1,runTest25/1,runTest3/1]).
+-export([runTest1a/1,
+         runTest1b/1,
+         runTest2a/1,
+         runTest2b/1]).
 
 runTest(Size) -> 
 	server:start_link(),
@@ -9,7 +13,27 @@ runTest(Size) ->
 	Finish=now(),
 	server:stop(),
 	print_results(Count,Size,Start,Finish).
-	
+
+%% move the list generation outside the measurement
+runTest1a(Size) ->
+    server:start_link(),
+    Input = lists:seq(1,Size),
+    Start=now(),
+    Count=test1a(Input),
+    Finish=now(),
+    server:stop(),
+    print_results(Count,Size,Start,Finish).
+
+%% remove usage of plists
+runTest1b(Size) ->
+    server:start_link(),
+    Input = lists:seq(1,Size),
+    Start=now(),
+    Count=test1b(Input),
+    Finish=now(),
+    server:stop(),
+    print_results(Count,Size,Start,Finish).
+ 
 runTest2(Size) ->
 	server2:start_link(),
 	Start=now(),
@@ -17,6 +41,26 @@ runTest2(Size) ->
 	Finish=now(),
 	server2:stop(),
 	print_results(Count,Size,Start,Finish).
+
+%% move list generation outside measurement
+runTest2a(Size) ->
+    server2:start_link(),
+    Input = lists:seq(1,Size),
+    Start=now(),
+    Count=test2a(Input),
+    Finish=now(),
+    server2:stop(),
+    print_results(Count,Size,Start,Finish).
+
+%% remove usage of plists
+runTest2b(Size) ->
+    server2:start_link(),
+    Input = lists:seq(1,Size),
+    Start=now(),
+    Count=test2b(Input),
+    Finish=now(),
+    server2:stop(),
+    print_results(Count,Size,Start,Finish).
 
 runTest25(Size) ->
 	P=server2:start_link(),
@@ -38,6 +82,15 @@ test(Size) ->
 	plists:foreach(fun (_X)-> server:bytes(100) end,lists:seq(1,Size)),
 	server:get_count().
 
+test1a(Input) ->
+	plists:foreach(fun (_X)-> server:bytes(100) end,Input),
+	server:get_count().
+
+test1b(Input) ->
+    lists:foreach(fun(_X) -> server:bytes(100) end, Input),
+    server:get_count().
+
+
 test2(PID,Size) ->
 	plists:foreach(fun (_X) -> server2:bytes(PID,100) end,lists:seq(1,Size)),
 	server2:get_count(PID).
@@ -45,6 +98,16 @@ test2(PID,Size) ->
 test2(Size) ->
 	plists:foreach(fun (_X)-> server2:bytes(100) end,lists:seq(1,Size)),
 	server2:get_count().	
+
+test2a(Input) ->
+	plists:foreach(fun (_X)-> server2:bytes(100) end, Input),
+	server2:get_count().	
+
+test2b(Input) ->
+    lists:foreach(fun(_X) -> server2:bytes(100) end,
+                  Input),
+    server2:get_count().
+                         
 
 test3(Pid,Size) ->
 	NProcs = erlang:system_info(logical_processors),
