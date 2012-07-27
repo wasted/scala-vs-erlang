@@ -7,6 +7,7 @@ import akka.event.Logging
 import akka.util._
 import akka.util.duration._
 import akka.dispatch._
+import akka.pattern.ask
 
 
 class ActorKernel extends Bootable {
@@ -41,8 +42,9 @@ class ActorKernel extends Bootable {
 	def theTest(counter: ActorRef, msgCount: Long) = {
 		val bytesPerMsg = 100
 		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
+    val future = counter ? GetAndReset
 
-		Await.result(counter ? GetAndReset, timeout.duration).asInstanceOf[Long]
+		Await.result(future, timeout.duration).asInstanceOf[Long]
 	}
 
 }
