@@ -17,7 +17,7 @@ object Application {
 	}
 
 	def start(print: Boolean = true) { runTest(runs, print) }
-	def stop() { }
+	def stop() { LAScheduler.shutdown() }
 
 
 	def runTest(msgCount: Long, print: Boolean) {
