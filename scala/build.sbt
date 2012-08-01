@@ -1,3 +1,5 @@
+import AssemblyKeys._
+
 name := "scalavserlang"
 
 organization := "ag.bett.scala"
@@ -5,6 +7,8 @@ organization := "ag.bett.scala"
 version := "2.0"
 
 scalaVersion := "2.9.1"
+
+assemblySettings
 
 resolvers ++= Seq(
   "Repo Maven" at "http://repo1.maven.org/maven2/",
