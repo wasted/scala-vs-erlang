@@ -1,27 +1,50 @@
 package ag.bett.scala.test.scala
 
-import scala.actors.Actor
-import scala.actors.Actor._
-import scala.compat.Platform
-import scala.actors.Scheduler
-import akka.kernel._
+import _root_.scala.compat.Platform
+import ag.bett.scala.test._
+
+import _root_.scala.actors.Actor
+import _root_.scala.actors.Actor._
+import _root_.scala.actors.Scheduler
 
 
-class ActorKernel extends Bootable {
+object Application {
 	val runs = 12000000
+	val counter = new CounterActor
 
-	def startup = {
-		ag.bett.scala.test.scala.CounterClient.run(runs)
-		shutdown
+	def main(args: Array[String]) {
+		start()
+		stop()
+		sys.exit(0)
 	}
 
-	def shutdown = sys.exit(0)
+	def start() { runTest(runs) }
+	def stop() { Scheduler.shutdown }
 
+	def runTest(msgCount: Long) {
+		val start = Platform.currentTime
+		val count = theTest(msgCount)
+		val finish = Platform.currentTime
+		val elapsedTime = (finish - start) / 1000.0
+
+		printf("%n")
+		printf("%n")
+		printf("[scala] Count is %s%n",count)
+		printf("[scala] Test took %s seconds%n", elapsedTime)
+		printf("[scala] Throughput=%s per sec%n", msgCount / elapsedTime)
+		printf("%n")
+		printf("%n")
+	}
+
+	def theTest(msgCount: Long): Any = {
+		val bytesPerMsg = 100
+		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
+
+		val count = counter !? GetAndReset
+		return count
+	}
 }
 
-
-case object GetAndReset
-case class AddCount(number:Long)
 
 class CounterActor extends Actor {
 	var count: Long = 0
@@ -41,30 +64,3 @@ class CounterActor extends Actor {
 	start()
 }
 
-object CounterClient {
-	val counter = new CounterActor
-
-	def run(runs: Long) {
-		runTest(runs)
-		Scheduler.shutdown
-	}
-
-	def runTest(msgCount: Long) {
-		val start = Platform.currentTime
-		val count = theTest(msgCount)
-		val finish = Platform.currentTime
-		val elapsedTime = (finish - start) / 1000.0
-
-		printf("[scala] Count is %s%n",count)
-		printf("[scala] Test took %s seconds%n", elapsedTime)
-		printf("[scala] Throughput=%s per sec%n", msgCount / elapsedTime)
-	}
-
-	def theTest(msgCount: Long): Any = {
-		val bytesPerMsg = 100
-		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
-
-		val count = counter !? GetAndReset
-		return count
-	}
-}

@@ -3,6 +3,7 @@
 *#
 *.sw[op]
 *.beam
+scala/sbt-launch.jar
 
 # sbt
 src_managed

@@ -1,30 +1,29 @@
 package ag.bett.scala.test.akka
 
-import scala.compat.Platform
-import akka.actor._
-import akka.kernel._
-import akka.event.Logging
-import akka.util._
-import akka.util.duration._
-import akka.dispatch._
-import akka.pattern.ask
+import _root_.scala.compat.Platform
+import ag.bett.scala.test._
+
+import _root_.akka.actor._
+import _root_.akka.event.Logging
+import _root_.akka.util._
+import _root_.akka.util.duration._
+import _root_.akka.dispatch._
+import _root_.akka.pattern.ask
 
 
-class ActorKernel extends Bootable {
+object Application {
 	val system = ActorSystem("AkkaTest")
+	val testActor = system.actorOf(Props[CounterActor], "test")
 	val runs = 12000000
 
-	def startup = {
-		val testActor = system.actorOf(Props[CounterActor], "test")
-		runTest(testActor, runs)
-		shutdown
+	def main(args: Array[String]) {
+		start()
+		stop()
 		sys.exit(0)
-		//system.eventStream.subscribe(mgmt, classOf[RemoteLifeCycleEvent])
 	}
 
-	def shutdown = {
-		system.shutdown()
-	}
+	def start() { runTest(testActor, runs) }
+	def stop() { system.shutdown() }
 
 	def runTest(counter: ActorRef, msgCount: Long) {
 		val start = Platform.currentTime
@@ -32,9 +31,13 @@ class ActorKernel extends Bootable {
 		val finish = Platform.currentTime
 		val elapsedTime = (finish - start) / 1000.0
 
+		printf("%n")
+		printf("%n")
 		printf("[akka] Count is %s%n",count)
 		printf("[akka] Test took %s seconds%n", elapsedTime)
 		printf("[akka] Throughput=%s per sec%n", msgCount / elapsedTime)
+		printf("%n")
+		printf("%n")
 	}
 
 	implicit val timeout = Timeout(5 seconds)
@@ -42,7 +45,7 @@ class ActorKernel extends Bootable {
 	def theTest(counter: ActorRef, msgCount: Long) = {
 		val bytesPerMsg = 100
 		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
-    val future = counter ? GetAndReset
+		val future = counter ? GetAndReset
 
 		Await.result(future, timeout.duration).asInstanceOf[Long]
 	}
