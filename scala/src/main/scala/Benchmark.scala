@@ -10,17 +10,23 @@ object BenchmarkAll extends App {
 
 	override def main(args: Array[String]) {
 
-		// akka
-		akka.Application.start
-		akka.Application.stop
+		// lift
+		println("Warmup run!")
+		lift.Application.start(false)
+		lift.Application.stop
+		println("Warmup run finished!")
 
 		// lift
-		lift.Application.start
-		lift.Application.stop
+		lift.Application.start()
+		lift.Application.stop()
+
+		// akka
+		akka.Application.start()
+		akka.Application.stop()
 
 		// scala
-		scala.Application.start
-		scala.Application.stop
+		scala.Application.start()
+		scala.Application.stop()
 
 		sys.exit(0)
 	}

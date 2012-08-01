@@ -32,11 +32,9 @@ object Application {
 		val elapsedTime = (finish - start) / 1000.0
 
 		printf("%n")
-		printf("%n")
 		printf("[akka] Count is %s%n",count)
 		printf("[akka] Test took %s seconds%n", elapsedTime)
 		printf("[akka] Throughput=%s per sec%n", msgCount / elapsedTime)
-		printf("%n")
 		printf("%n")
 	}
 

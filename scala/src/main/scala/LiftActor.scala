@@ -16,23 +16,24 @@ object Application {
 		sys.exit(0)
 	}
 
-	def start() { runTest(runs) }
+	def start(print: Boolean = true) { runTest(runs, print) }
 	def stop() { }
 
 
-	def runTest(msgCount: Long) {
+	def runTest(msgCount: Long, print: Boolean) {
 		val start = Platform.currentTime
 		val count = theTest(msgCount)
 		val finish = Platform.currentTime
 		val elapsedTime = (finish - start) / 1000.0
 
-		printf("%n")
-		printf("%n")
-		printf("[lift] Count is %s%n",count)
-		printf("[lift] Test took %s seconds%n", elapsedTime)
-		printf("[lift] Throughput=%s per sec%n", msgCount / elapsedTime)
-		printf("%n")
-		printf("%n")
+		// disable output on warmup run!
+		if (print) {
+			printf("%n")
+			printf("[lift] Count is %s%n",count)
+			printf("[lift] Test took %s seconds%n", elapsedTime)
+			printf("[lift] Throughput=%s per sec%n", msgCount / elapsedTime)
+			printf("%n")
+		}
 	}
 
 	def theTest(msgCount: Long): Any = {
@@ -47,7 +48,7 @@ object Application {
 
 
 object CounterActor extends LiftActor {
-	var count: Long = 0
+	var count = 0L
 
 	def messageHandler = {
 		case GetAndReset =>
@@ -55,7 +56,7 @@ object CounterActor extends LiftActor {
 			count = 0
 			reply(current)
 		case AddCount(extraCount) =>
-			count=count+extraCount
+			count += extraCount
 	}
 }
 

@@ -28,11 +28,9 @@ object Application {
 		val elapsedTime = (finish - start) / 1000.0
 
 		printf("%n")
-		printf("%n")
 		printf("[scala] Count is %s%n",count)
 		printf("[scala] Test took %s seconds%n", elapsedTime)
 		printf("[scala] Throughput=%s per sec%n", msgCount / elapsedTime)
-		printf("%n")
 		printf("%n")
 	}
 
