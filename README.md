@@ -13,6 +13,6 @@ To run the erlang OTP version compile the 3 files then run client:runTest(300000
 
 To run the erlang bare receive version compile server2 as well and then run client:runTest2(3000000).
 
-To run the scala version do ```./sbt package``` and put the .jar into your Akka's deploy-directory.
+To run the scala version do ```./sbt run``` and select one of the benchmarks.
 
 
