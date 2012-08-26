@@ -15,14 +15,27 @@ object BenchmarkAll extends App {
 		lift.Application.start(false)
 		lift.Application.stop
 		println("Warmup run finished!")
+		val runtime = Runtime.getRuntime
+
+		println("Garbage Collection")
+		runtime.gc
+		println
 
 		// lift
 		lift.Application.start()
 		lift.Application.stop()
 
+		println("Garbage Collection")
+		runtime.gc
+		println
+
 		// akka
 		akka.Application.start()
 		akka.Application.stop()
+
+		println("Garbage Collection")
+		runtime.gc
+		println
 
 		// scala
 		scala.Application.start()

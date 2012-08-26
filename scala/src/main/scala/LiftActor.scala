@@ -4,11 +4,12 @@ import _root_.scala.compat.Platform
 import ag.bett.scala.test._
 
 import net.liftweb.actor._
+import java.util.concurrent.atomic._
 
 
 object Application {
-	val runs = 12000000
-	val counter = CounterActor
+	val runs = 1200000
+	val counter = new CounterActor
 
 	def main(args: Array[String]) {
 		start()
@@ -47,7 +48,7 @@ object Application {
 }
 
 
-object CounterActor extends LiftActor {
+class CounterActor extends LiftActor {
 	var count = 0L
 
 	def messageHandler = {
