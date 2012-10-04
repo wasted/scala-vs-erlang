@@ -8,7 +8,7 @@ import java.util.concurrent.atomic._
 
 
 object Application {
-	val runs = 1200000
+	val runs = 12000000
 	val counter = new CounterActor
 
 	def main(args: Array[String]) {
