@@ -1,7 +1,7 @@
-package ag.bett.scala.test.lift
+package io.wasted.bench.scalavserlang.lift
 
 import _root_.scala.compat.Platform
-import ag.bett.scala.test._
+import io.wasted.bench.scalavserlang._
 
 import net.liftweb.actor._
 import java.util.concurrent.atomic._
@@ -23,14 +23,14 @@ object Application {
 
 	def runTest(msgCount: Long, print: Boolean) {
 		val start = Platform.currentTime
-		val count = theTest(msgCount)
+		theTest(msgCount)
 		val finish = Platform.currentTime
 		val elapsedTime = (finish - start) / 1000.0
 
 		// disable output on warmup run!
 		if (print) {
 			printf("%n")
-			printf("[lift] Count is %s%n",count)
+			printf("[lift] Count is %s%n", msgCount)
 			printf("[lift] Test took %s seconds%n", elapsedTime)
 			printf("[lift] Throughput=%s per sec%n", msgCount / elapsedTime)
 			printf("%n")

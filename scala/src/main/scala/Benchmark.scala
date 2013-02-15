@@ -1,4 +1,4 @@
-package ag.bett.scala.test
+package io.wasted.bench.scalavserlang
 
 
 case object Reset
@@ -16,10 +16,13 @@ object BenchmarkAll extends App {
 		lift.Application.stop
 		println("Warmup run finished!")
 		val runtime = Runtime.getRuntime
+		println
 
 		println("Garbage Collection")
 		runtime.gc
+		println("Garbage Collection finished")
 		println
+		Thread.sleep(1000)
 
 		// lift
 		lift.Application.start()
@@ -27,7 +30,9 @@ object BenchmarkAll extends App {
 
 		println("Garbage Collection")
 		runtime.gc
+		println("Garbage Collection finished")
 		println
+		Thread.sleep(1000)
 
 		// akka
 		akka.Application.start()
@@ -35,7 +40,9 @@ object BenchmarkAll extends App {
 
 		println("Garbage Collection")
 		runtime.gc
+		println("Garbage Collection finished")
 		println
+		Thread.sleep(1000)
 
 		//wactor 
 		wactor.Application.start()

@@ -44,11 +44,7 @@ java -ea -server $SBT_OPTS $JAVA_OPTS			\
 	-XX:+AggressiveOpts             		\
 	-XX:+OptimizeStringConcat			\
 	-XX:+UseConcMarkSweepGC               		\
-	-XX:+CMSParallelRemarkEnabled   		\
-	-XX:+CMSClassUnloadingEnabled   		\
-	-XX:+CMSIncrementalMode         		\
-	-Dio.netty.epollBugWorkaround=true		\
-	-Xms128M					\
-	-Xmx512M					\
+	-Xms1G					\
+	-Xmx2G					\
 	-jar $sbtjar "$@"
 

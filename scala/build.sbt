@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "scalavserlang"
 
-organization := "ag.bett.scala"
+organization := "io.wasted.bench"
 
 version := "2.0"
 

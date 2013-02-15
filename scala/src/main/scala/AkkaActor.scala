@@ -1,7 +1,7 @@
-package ag.bett.scala.test.akka
+package io.wasted.bench.scalavserlang.akka
 
 import _root_.scala.compat.Platform
-import ag.bett.scala.test._
+import io.wasted.bench.scalavserlang._
 
 import _root_.akka.actor._
 import _root_.akka.util._
@@ -24,12 +24,12 @@ object Application {
 
 	def runTest(counter: ActorRef, msgCount: Long) {
 		val start = Platform.currentTime
-		val count = theTest(counter, msgCount)
+		theTest(counter, msgCount)
 		val finish = Platform.currentTime
 		val elapsedTime = (finish - start) / 1000.0
 
 		printf("%n")
-		printf("[akka] Count is %s%n",count)
+		printf("[akka] Count is %s%n", msgCount)
 		printf("[akka] Test took %s seconds%n", elapsedTime)
 		printf("[akka] Throughput=%s per sec%n", msgCount / elapsedTime)
 		printf("%n")

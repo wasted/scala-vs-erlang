@@ -1,7 +1,7 @@
-package ag.bett.scala.test.wactor
+package io.wasted.bench.scalavserlang.wactor
 
 import _root_.scala.compat.Platform
-import ag.bett.scala.test._
+import io.wasted.bench.scalavserlang._
 
 import io.wasted.util._
 import java.util.concurrent.atomic._
@@ -23,22 +23,23 @@ object Application {
 
 	def runTest(msgCount: Long, print: Boolean) {
 		val start = Platform.currentTime
-		val count = theTest(msgCount)
+		theTest(msgCount)
 		val finish = Platform.currentTime
 		val elapsedTime = (finish - start) / 1000.0
 
 		// disable output on warmup run!
 		if (print) {
 			printf("%n")
-			printf("[lift] Test took %s seconds%n", elapsedTime)
-			printf("[lift] Throughput=%s per sec%n", msgCount / elapsedTime)
+			printf("[wactor] Count is %s%n", msgCount)
+			printf("[wactor] Test took %s seconds%n", elapsedTime)
+			printf("[wactor] Throughput=%s per sec%n", msgCount / elapsedTime)
 			printf("%n")
 		}
 	}
 
 	def theTest(msgCount: Long): Any = {
 		val bytesPerMsg = 100
-		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
+		val updates = (1L to msgCount).par.foreach((x: Long) => counter !! new AddCount(bytesPerMsg))
         counter ! Reset
 	}
 
