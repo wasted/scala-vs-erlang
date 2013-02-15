@@ -1,7 +1,7 @@
 package ag.bett.scala.test
 
 
-case object GetAndReset
+case object Reset
 case class AddCount(number:Long)
 
 
@@ -37,9 +37,14 @@ object BenchmarkAll extends App {
 		runtime.gc
 		println
 
-		// scala
-		scala.Application.start()
-		scala.Application.stop()
+		//wactor 
+		wactor.Application.start()
+		wactor.Application.stop()
+
+		println("Garbage Collection")
+		runtime.gc
+		println
+
 
 		sys.exit(0)
 	}

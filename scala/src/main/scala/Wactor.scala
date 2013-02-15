@@ -1,15 +1,15 @@
-package ag.bett.scala.test.lift
+package ag.bett.scala.test.wactor
 
 import _root_.scala.compat.Platform
 import ag.bett.scala.test._
 
-import net.liftweb.actor._
+import io.wasted.util._
 import java.util.concurrent.atomic._
 
 
 object Application {
 	val runs = 12000000
-	val counter = new CounterActor
+	val counter = new CounterWactor
 
 	def main(args: Array[String]) {
 		start()
@@ -18,7 +18,7 @@ object Application {
 	}
 
 	def start(print: Boolean = true) { runTest(runs, print) }
-	def stop() { LAScheduler.shutdown() }
+	def stop() { counter ! Wactor.Die }
 
 
 	def runTest(msgCount: Long, print: Boolean) {
@@ -30,7 +30,6 @@ object Application {
 		// disable output on warmup run!
 		if (print) {
 			printf("%n")
-			printf("[lift] Count is %s%n",count)
 			printf("[lift] Test took %s seconds%n", elapsedTime)
 			printf("[lift] Throughput=%s per sec%n", msgCount / elapsedTime)
 			printf("%n")
@@ -40,19 +39,18 @@ object Application {
 	def theTest(msgCount: Long): Any = {
 		val bytesPerMsg = 100
 		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
-
-		counter ! Reset
+        counter ! Reset
 	}
 
 }
 
-
-class CounterActor extends LiftActor {
+class CounterWactor extends Wactor {
+	override val loggerName = "CounterWactor"
 	var count = 0L
 
-	def messageHandler = {
+	def receive = {
 		case Reset =>
-			printf("[lift] Count is %s%n",count)
+			printf("[wactor] Count is %s%n",count)
 			count = 0
 		case AddCount(extraCount) =>
 			count += extraCount

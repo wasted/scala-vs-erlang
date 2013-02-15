@@ -4,11 +4,8 @@ import _root_.scala.compat.Platform
 import ag.bett.scala.test._
 
 import _root_.akka.actor._
-import _root_.akka.event.Logging
 import _root_.akka.util._
-import _root_.akka.util.duration._
-import _root_.akka.dispatch._
-import _root_.akka.pattern.ask
+import scala.concurrent.duration._
 
 
 object Application {
@@ -38,30 +35,22 @@ object Application {
 		printf("%n")
 	}
 
-	implicit val timeout = Timeout(5 seconds)
-
 	def theTest(counter: ActorRef, msgCount: Long) = {
 		val bytesPerMsg = 100
 		val updates = (1L to msgCount).par.foreach((x: Long) => counter ! new AddCount(bytesPerMsg))
-		val future = counter ? GetAndReset
 
-		Await.result(future, timeout.duration).asInstanceOf[Long]
+		counter ! Reset
 	}
 
 }
-
-
-case object GetAndReset
-case class AddCount(number:Long)
 
 class CounterActor extends Actor {
 	var count: Long = 0
 
 	def receive = {
-		case GetAndReset =>
-			val current = count
+		case Reset =>
+			printf("[akka] Count is %s%n",count)
 			count = 0
-			sender ! current
 		case AddCount(extraCount) =>
 			count=count+extraCount
 	}
